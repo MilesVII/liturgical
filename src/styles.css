@@ -45,6 +45,7 @@ body {
 	display: flex;
 	flex-flow: column nowrap;
 	min-height: 100vh;
+	margin-top: 32px;
 }
 
 .transparent {
@@ -165,6 +166,10 @@ details[open] summary {
 
 .device-rituals-list, .device-rituals-add {
 	display: contents;
+}
+
+.device-ritual-description {
+	white-space: pre;
 }
 
 .device-rituals-interval .text-input {

@@ -24,7 +24,7 @@ export function addDevice(container: HTMLElement, device: Device, devices: Devic
 	container.append(root)
 }
 
-export function renderDevice(
+function renderDevice(
 	device: Device,
 	rename: (name: string) => void,
 	remove: () => void,
@@ -43,30 +43,11 @@ export function renderDevice(
 		ritualsList.innerHTML = "";
 		if (params.rituals.length) {
 			params.rituals.forEach((ritual, i) => {
-				const template = document.querySelector<HTMLTemplateElement>("template#template-ritual")!;
-				const ritualContainer = fromTemplate(template);
-
-				ritualContainer.querySelector("summary")!.textContent = ritual.name;
-				const details = ritualContainer.querySelector("div")!;
-
-				const description = document.createElement("div");
-				description.textContent = ritual.desc;
-				details.append(description);
-
-				const time = document.createElement("div");
-				time.textContent = `every ${ritual.days} days`;
-				details.append(time);
-
-				const remove = document.createElement("button");
-				remove.className = "strip-defaults butt-on";
-				remove.addEventListener("click", () => {
+				const r = ritualView(ritual, () => {
 					removeRitual(i);
 					root.rampike.render();
 				});
-				remove.textContent = "remove"
-				details.append(remove);
-
-				ritualsList.append(ritualContainer);
+				ritualsList.append(r);
 			})
 		} else {
 			const template = document.querySelector<HTMLTemplateElement>("template#template-rituals-placeholder")!;
@@ -128,4 +109,29 @@ export function renderDevice(
 	startDate.value = today;
 
 	return root;
+}
+
+function ritualView(ritual: Ritual, removeCB: () => void) {
+	const template = document.querySelector<HTMLTemplateElement>("template#template-ritual")!;
+	const ritualContainer = fromTemplate(template);
+
+	ritualContainer.querySelector("summary")!.textContent = ritual.name;
+	const details = ritualContainer.querySelector("div")!;
+
+	const description = document.createElement("div");
+	description.className = "device-ritual-description";
+	description.textContent = ritual.desc;
+	details.append(description);
+
+	const time = document.createElement("div");
+	time.textContent = `every ${ritual.days} days`;
+	details.append(time);
+
+	const remove = document.createElement("button");
+	remove.className = "strip-defaults butt-on";
+	remove.addEventListener("click", removeCB);
+	remove.textContent = "remove"
+	details.append(remove);
+
+	return ritualContainer;
 }
