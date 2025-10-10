@@ -1,22 +1,31 @@
-import { invoke } from "@tauri-apps/api/core";
+import { addDevice } from "./devicecard";
+import type { Device } from "./types";
+import { load, save } from "./utils";
 
-let greetInputEl: HTMLInputElement | null;
-let greetMsgEl: HTMLElement | null;
+window.addEventListener("DOMContentLoaded", main);
 
-async function greet() {
-  if (greetMsgEl && greetInputEl) {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsgEl.textContent = await invoke("greet", {
-      name: greetInputEl.value,
-    });
-  }
+async function main() {
+	const devices: Device[] = load();
+
+	const container = document.querySelector<HTMLElement>(".devices-list");
+	if (!container) return;
+
+	devices.forEach(d => addDevice(container, d, devices));
+
+	const addDeviceButton = document.querySelector("#add-device-button")!;
+	const addDeviceInput = document.querySelector<HTMLInputElement>("#add-device-name")!;
+	addDeviceButton.addEventListener("click", () => {
+		const name = addDeviceInput.value.trim();
+		if (!name) return;
+
+		addDeviceInput.value = "";
+		const newDevice: Device = {
+			id: Math.max(-1, ...devices.map(d => d.id)) + 1,
+			name,
+			rituals: []
+		};
+		devices.push(newDevice);
+		addDevice(container, newDevice, devices);
+		save(devices);
+	});
 }
-
-window.addEventListener("DOMContentLoaded", () => {
-  greetInputEl = document.querySelector("#greet-input");
-  greetMsgEl = document.querySelector("#greet-msg");
-  document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    greet();
-  });
-});

@@ -1,43 +1,64 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/src/styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri App</title>
-    <script type="module" src="/src/main.ts" defer></script>
-  </head>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
+		<title data-t="page.title">Liturgical</title>
+		<link rel="icon" type="image/png" href="gfx/favicon128.png"/>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/src/styles.css" />
+		<script type="module" src="/src/main.ts" defer></script>
+	</head>
+	<body>
+		<template id="template-rituals-placeholder">
+			<div class="rituals-placeholder">no rituals added</div>
+		</template>
+		<template id="template-ritual">
+			<details>
+				<summary></summary>
+				<div></div>
+			</details>
+		</template>
+		<template id="template-device">
+			<article class="device-card shadow">
+				<div class="device-title">
+					<h2></h2>
+					<button class="strip-defaults butt-on"><img src="/src/assets/rename.svg" /></button>
+					<button class="strip-defaults butt-on"><img src="/src/assets/delete.svg" /></button>
+				</div>
+				<div class="device-rituals-list"></div>
+				<hr/>
+				<details>
+					<summary>add ritual</summary>
+					<div id="device-rituals-form">
+						<input type="text" data-id="name" class="strip-defaults input-outline text-input" placeholder="ritual name"></input>
+						<textarea data-id="desc" class="strip-defaults input-outline text-input" placeholder="ritual description"></textarea>
+						<div class="device-rituals-interval">
+							<span>every</span>
+							<input type="number" data-id="time" class="strip-defaults input-outline text-input" value="10"></input>
+							<span>days</span>
+						</div>
+						<div>
+							<span>starting from</span>
+							<input type="date" data-id="from" class="strip-defaults input-outline date-input"></input>
+						</div>
+						<button class="strip-defaults butt-on">add ritual</button>
+					</div>
+				</details>
+			</article>
+		</template>
 
-  <body>
-    <main class="container">
-      <h1>Welcome to Tauri</h1>
+		<div class="container">
+			<h1>воооот</h1>
+			<article class="add-device-block shadow">
+				<input type="text" id="add-device-name" class="strip-defaults input-outline text-input" placeholder="device name"></input>
+				<button id="add-device-button" class="strip-defaults butt-on">add device</button>
+			</article>
+			<div class="devices-list">
 
-      <div class="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/src/assets/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img
-            src="/src/assets/tauri.svg"
-            class="logo tauri"
-            alt="Tauri logo"
-          />
-        </a>
-        <a href="https://www.typescriptlang.org/docs" target="_blank">
-          <img
-            src="/src/assets/typescript.svg"
-            class="logo typescript"
-            alt="typescript logo"
-          />
-        </a>
-      </div>
-      <p>Click on the Tauri logo to learn more about the framework</p>
-
-      <form class="row" id="greet-form">
-        <input id="greet-input" placeholder="Enter a name..." />
-        <button type="submit">Greet</button>
-      </form>
-      <p id="greet-msg"></p>
-    </main>
-  </body>
+			</div>
+		</div>
+	</body>
 </html>

@@ -1,116 +1,172 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
 
-.logo.typescript:hover {
-  filter: drop-shadow(0 0 2em #2d79c7);
-}
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+	--font-main: normal 400 17px/22px "Roboto";
+	--font-butt: normal 500 17px/22px "Roboto";
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
+	--color-back: #081B1F;
+	--color-fore: #35363F;
+	--color-main: #A76043;
+	--color-acnt: #B1A7A7;
+	--color-text: #FEEFEF;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+	--radius-block: 12px;
+	--radius-small: 4px;
+
+	--padding-block: calc(var(--radius-block) - var(--radius-small));
+	--padding-input: 4px;
+
+	background-color: var(--color-back);
+	color-scheme: dark;
+
+	font: var(--font-main);
+	color: var(--color-text);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+#app, body, html {
+	margin: 0;
+	border: 0;
+	padding: 0;
+}
+
+.strip-defaults {
+	appearance: none;
+	color: inherit;
+	background: none;
+	font: inherit;
+	outline: inherit;
+	border: none;
+}
+
+body {
+	display: flex;
+	flex-flow: column nowrap;
+	min-height: 100vh;
+}
+
+.transparent {
+	visibility: hidden;
+	opacity: 0;
 }
 
 .container {
-  margin: 0;
-  padding-top: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+	display: flex;
+	flex-flow: column nowrap;
+	padding: 16px;
+	gap: 16px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
+.shadow {
+	box-shadow: 4px 4px 4px rgba(0, 0, 0, .20);
 }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
 }
 
-.row {
-  display: flex;
-  justify-content: center;
+img {
+	display: block;
+	aspect-ratio: 1/1;
+	height: 1.5em;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+hr {
+	width: 100%;
 }
 
-a:hover {
-  color: #535bf2;
+.butt-on {
+	width: fit-content;
+	border-radius: var(--radius-small);
+	background: var(--color-main);
+	color: var(--color-back);
+	padding: 4px 8px;
+	text-align: center;
+	cursor: pointer;
+	font: var(--font-butt);
+	flex-shrink: 0;
+}
+.butt-on:hover {
+	background: var(--color-acnt);
 }
 
-h1 {
-  text-align: center;
+.input-outline {
+	border-radius: var(--radius-small);
+	padding: var(--padding-input);
+	border: 2px solid var(--color-main);
+	width: 100%;
+}
+.input-outline:focus {
+	border-color: var(--color-acnt);
+}
+.date-input {
+	width: 170px;
+	max-width: 100%;
 }
 
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+details {
+	border: 2px solid var(--color-main);
+	border-radius: var(--radius-small);
+	padding: var(--padding-input) var(--padding-input) 0;
+}
+details>div {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 8px;
+}
+summary {
+	cursor: pointer;
+	--unpad: calc(var(--padding-input) * -1);
+	margin: var(--unpad) var(--unpad) 0;
+	padding: var(--padding-input);
+}
+details[open] {
+	padding: var(--padding-input);
+}
+details[open] summary {
+	border-bottom: 2px solid var(--color-main);
+	margin-bottom: var(--padding-input);
 }
 
-button {
-  cursor: pointer;
+.devices-list {
+	display: contents;
 }
 
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
+.device-title {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	gap: 8px;
+	padding-inline-start: 8px;
 }
 
-#greet-input {
-  margin-right: 5px;
+.device-title > h2 {
+	margin-inline-end: auto;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
+.device-card, article {
+	background: var(--color-fore);
+	border-radius: var(--radius-block);
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 8px;
+	padding: var(--padding-block);
+}
 
-  a:hover {
-    color: #24c8db;
-  }
+.device-controls {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	align-content: stretch;
+	gap: 8px;
+}
 
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
-  button:active {
-    background-color: #0f0f0f69;
-  }
+.device-rituals-list, .device-rituals-add {
+	display: contents;
+}
+
+.device-rituals-interval .text-input {
+	width: 8ch;
 }

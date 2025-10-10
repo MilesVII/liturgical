@@ -1,0 +1,131 @@
+import { fromTemplate, rampike } from "./rampike";
+import type { Device, Ritual } from "./types";
+import { dateStringToUnixTime, save, unixTimeToDateString } from "./utils";
+
+export function addDevice(container: HTMLElement, device: Device, devices: Device[]) {
+	const rename = (name: string) => {
+		device.name = name;
+		save(devices);
+	}
+	const remove = () => {
+		const index = devices.findIndex(d => d.id === device.id);
+		if (index === -1) return;
+		devices.splice(index, 1);
+	}
+	const addRitual = (ritual: Ritual) => {
+		device.rituals.push(ritual);
+		save(devices);
+	}
+	const removeRitual = (r: number) => {
+		device.rituals.splice(r, 1);
+		save(devices);
+	}
+	const root = renderDevice(device, rename, remove, addRitual, removeRitual)
+	container.append(root)
+}
+
+export function renderDevice(
+	device: Device,
+	rename: (name: string) => void,
+	remove: () => void,
+	addRitual: (ritual: Ritual) => void,
+	removeRitual: (ritualIndex: number) => void
+) {
+	const template = document.querySelector<HTMLTemplateElement>("#template-device")!;
+	const node = fromTemplate(template);
+	const title = node.querySelector("h2")!;
+	const startDate = node.querySelector<HTMLInputElement>(".date-input")!;
+	const titleEdible = () => !(!title.contentEditable || title.contentEditable === "false" || title.contentEditable === "inherit");
+	const root = rampike(node, device, (params, root) => {
+		title.textContent = params.name;
+
+		const ritualsList = root.querySelector(".device-rituals-list")!;
+		ritualsList.innerHTML = "";
+		if (params.rituals.length) {
+			params.rituals.forEach((ritual, i) => {
+				const template = document.querySelector<HTMLTemplateElement>("template#template-ritual")!;
+				const ritualContainer = fromTemplate(template);
+
+				ritualContainer.querySelector("summary")!.textContent = ritual.name;
+				const details = ritualContainer.querySelector("div")!;
+
+				const description = document.createElement("div");
+				description.textContent = ritual.desc;
+				details.append(description);
+
+				const time = document.createElement("div");
+				time.textContent = `every ${ritual.days} days`;
+				details.append(time);
+
+				const remove = document.createElement("button");
+				remove.className = "strip-defaults butt-on";
+				remove.addEventListener("click", () => {
+					removeRitual(i);
+					root.rampike.render();
+				});
+				remove.textContent = "remove"
+				details.append(remove);
+
+				ritualsList.append(ritualContainer);
+			})
+		} else {
+			const template = document.querySelector<HTMLTemplateElement>("template#template-rituals-placeholder")!;
+			const placeholder = fromTemplate(template);
+			ritualsList.append(placeholder);
+		}
+	});
+	const today = unixTimeToDateString(Date.now() / 1000);
+
+	const [renameButton, removeButton] = root.querySelectorAll("button");
+	const saveName = () => {
+		title.contentEditable = "false";
+		rename(title.textContent!);
+		root.rampike.render();
+	};
+	renameButton.addEventListener("click", () => {
+		if (titleEdible()) {
+			saveName();
+		} else {
+			title.contentEditable = "plaintext-only";
+			title.focus();
+		}
+	});
+	title.addEventListener("blur", () => {
+		if (titleEdible()) saveName();
+	});
+	removeButton.addEventListener("click", () => {
+		if (!confirm(`removing device`)) return;
+		root.remove();
+		remove();
+	});
+	const ritualButton = node.querySelector("#device-rituals-form button")!;
+	ritualButton.addEventListener("click", () => {
+		const form = node.querySelector("#device-rituals-form")!;
+		const name = form.querySelector<HTMLInputElement>   (`[data-id="name"]`)!;
+		const desc = form.querySelector<HTMLTextAreaElement>(`[data-id="desc"]`)!;
+		const time = form.querySelector<HTMLInputElement>   (`[data-id="time"]`)!;
+		const from = form.querySelector<HTMLInputElement>   (`[data-id="from"]`)!;
+		const values = {
+			name: name.value,
+			desc: desc.value,
+			days: parseInt(time.value, 10),
+			from: dateStringToUnixTime(from.value)
+		}
+		if (!values.name || isNaN(values.days)) {
+			alert("name empty or time interval invalid")
+			return;
+		}
+
+		addRitual(values);
+		name.value = "";
+		desc.value = "";
+		time.value = "10";
+		from.value = today;
+
+		root.rampike.render();
+	});
+
+	startDate.value = today;
+
+	return root;
+}
