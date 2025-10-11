@@ -1,4 +1,5 @@
 import { addDevice } from "./devicecard";
+import { updateNotifications } from "./notify";
 import type { Device } from "./types";
 import { load, save } from "./utils";
 
@@ -28,4 +29,6 @@ async function main() {
 		addDevice(container, newDevice, devices);
 		save(devices);
 	});
+
+	document.querySelector("h1")!.addEventListener("click", () => updateNotifications([]))
 }
