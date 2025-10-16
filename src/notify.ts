@@ -8,13 +8,15 @@ export async function updateNotifications(devices: Device[]) {
 
 	await cancel();
 
+	let id = 0;
 	for (const device of devices)
 	for (const ritual of device.rituals) {
 		await schedule({
 			title: `🕯️${device.name}`,
 			body: ritual.name,
 			start: closestLiturgy(ritual.from, ritual.days),
-			days: ritual.days
+			days: ritual.days,
+			id: id++
 		});
 	}
 }
@@ -34,7 +36,8 @@ type Args = {
 	start: number,
 	days: number,
 	title: String,
-	body: String
+	body: String,
+	id: number
 }
 
 export async function schedule(value: Args): Promise<void> {
