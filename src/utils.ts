@@ -1,7 +1,11 @@
 import { Device, TwistedRitual } from "./types";
 
 const PERSIST_KEY = "devices"
-export const DAY_MS = 24 * 60 * 60 * 1000;
+
+const MIN_MS = 60 * 1000;
+const HOUR_MS = 60 * MIN_MS;
+export const DAY_MS = 24 * HOUR_MS;
+export const DEFAULT_TIME = 10 * HOUR_MS;
 
 export function unixTimeToDateString(unixTime: number): string {
 	const date = new Date(unixTime * 1000);
@@ -29,7 +33,7 @@ export function load(): Device[] {
 }
 
 export function closestLiturgy(startMS: number, days: number, now: Date = new Date()) {
-	const today = stripTime(now).getTime();
+	const today = stripTime(now).getTime() + DEFAULT_TIME;
 	const step = days * DAY_MS;
 	let offset = 0;
 	while ((startMS + offset) < today) {

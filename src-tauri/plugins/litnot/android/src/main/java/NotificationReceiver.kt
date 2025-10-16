@@ -12,7 +12,7 @@ class NotificationReceiver : BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {
 		val title = intent.getStringExtra("title") ?: ""
 		val body = intent.getStringExtra("body") ?: ""
-		val nid = intent.getIntExtra("notification_id") ?: 0
+		val nid = intent.getIntExtra("notification_id", 0)
 
 		val channelId = "liturgies_channel"
 

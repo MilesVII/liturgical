@@ -12,6 +12,7 @@ export function addDevice(container: HTMLElement, device: Device, devices: Devic
 		const index = devices.findIndex(d => d.id === device.id);
 		if (index === -1) return;
 		devices.splice(index, 1);
+		updateAll();
 	}
 	const addRitual = (ritual: Ritual) => {
 		device.rituals.push(ritual);
