@@ -1,21 +1,21 @@
 import { isPermissionGranted, requestPermission } from "@tauri-apps/plugin-notification";
 import type { Device } from "./types";
 import { invoke } from '@tauri-apps/api/core';
+import { closestLiturgy } from "./utils";
 
 export async function updateNotifications(devices: Device[]) {
 	if (!await permission()) return;
 
 	await cancel();
 
-	for (const device of devices) {
-		for (const ritual of device.rituals) {
-			await schedule({
-				title: `🕯️${device.name}`,
-				body: ritual.name,
-				start: Date.now() + 5000,
-				days: ritual.days
-			});
-		}
+	for (const device of devices)
+	for (const ritual of device.rituals) {
+		await schedule({
+			title: `🕯️${device.name}`,
+			body: ritual.name,
+			start: closestLiturgy(ritual.from, ritual.days),
+			days: ritual.days
+		});
 	}
 }
 

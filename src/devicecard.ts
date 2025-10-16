@@ -1,11 +1,12 @@
+import { mudcrack } from "./mudcrack";
 import { fromTemplate, rampike } from "./rampike";
 import type { Device, Ritual } from "./types";
-import { dateStringToUnixTime, save, unixTimeToDateString } from "./utils";
+import { dateStringToUnixTime, unixTimeToDateString } from "./utils";
 
-export function addDevice(container: HTMLElement, device: Device, devices: Device[]) {
+export function addDevice(container: HTMLElement, device: Device, devices: Device[], updateAll: () => void) {
 	const rename = (name: string) => {
 		device.name = name;
-		save(devices);
+		updateAll();
 	}
 	const remove = () => {
 		const index = devices.findIndex(d => d.id === device.id);
@@ -14,11 +15,11 @@ export function addDevice(container: HTMLElement, device: Device, devices: Devic
 	}
 	const addRitual = (ritual: Ritual) => {
 		device.rituals.push(ritual);
-		save(devices);
+		updateAll();
 	}
 	const removeRitual = (r: number) => {
 		device.rituals.splice(r, 1);
-		save(devices);
+		updateAll();
 	}
 	const root = renderDevice(device, rename, remove, addRitual, removeRitual)
 	container.append(root)
@@ -118,20 +119,25 @@ function ritualView(ritual: Ritual, removeCB: () => void) {
 	ritualContainer.querySelector("summary")!.textContent = ritual.name;
 	const details = ritualContainer.querySelector("div")!;
 
-	const description = document.createElement("div");
-	description.className = "device-ritual-description";
-	description.textContent = ritual.desc;
-	details.append(description);
-
-	const time = document.createElement("div");
-	time.textContent = `every ${ritual.days} days`;
-	details.append(time);
-
-	const remove = document.createElement("button");
-	remove.className = "strip-defaults butt-on";
-	remove.addEventListener("click", removeCB);
-	remove.textContent = "remove"
-	details.append(remove);
+	details.append(
+		mudcrack({
+			elementName: "div",
+			className: "device-ritual-description",
+			textContent: ritual.desc
+		}),
+		mudcrack({
+			elementName: "div",
+			textContent: `every ${ritual.days} days`
+		}),
+		mudcrack({
+			elementName: "button",
+			className: "strip-defaults butt-on",
+			textContent: "remove",
+			events: {
+				"click": removeCB
+			}
+		})
+	);
 
 	return ritualContainer;
 }

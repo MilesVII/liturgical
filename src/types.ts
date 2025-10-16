@@ -11,3 +11,5 @@ export type Device = {
 	name: string;
 	rituals: Ritual[]
 }
+
+export type TwistedRitual = Ritual & { device: Omit<Device, "rituals"> };

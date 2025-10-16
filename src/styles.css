@@ -44,8 +44,7 @@
 body {
 	display: flex;
 	flex-flow: column nowrap;
-	min-height: 100vh;
-	margin-top: 32px;
+	margin-block: 32px;
 }
 
 .transparent {
@@ -131,6 +130,11 @@ details[open] summary {
 	margin-bottom: var(--padding-input);
 }
 
+ul {
+	margin: 0;
+	list-style: disclosure-closed;
+}
+
 .devices-list {
 	display: contents;
 }
@@ -174,4 +178,24 @@ details[open] summary {
 
 .device-rituals-interval .text-input {
 	width: 8ch;
+}
+
+h3 {
+	width: fit-content;
+	margin-top: 16px;
+	margin-bottom: -8px;
+	border-bottom: 2px solid var(--color-main);
+}
+
+.schedule-grid-day {
+	display: flex;
+	flex-flow: column nowrap;
+	background-color: var(--color-fore);
+	border-radius: var(--radius-block);
+	padding: var(--padding-block);
+	gap: var(--padding-block);
+}
+
+.schedule-grid-day h4 {
+	font-weight: bold;
 }

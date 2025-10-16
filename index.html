@@ -49,16 +49,29 @@
 				</details>
 			</article>
 		</template>
+		<template id="template-schedule-day">
+			<div class="schedule-grid-day"></div>
+		</template>
 
 		<div class="container">
 			<h1>🕯️Liturgical</h1>
-			<article class="add-device-block shadow">
-				<input type="text" id="add-device-name" class="strip-defaults input-outline text-input" placeholder="device name"></input>
-				<button id="add-device-button" class="strip-defaults butt-on">add device</button>
-			</article>
-			<div class="devices-list">
-
+			
+			<div class="tabs-selector">
+				<button data-tab="manage" class="strip-defaults butt-on">manage</button>
+				<button data-tab="schedule" class="strip-defaults butt-on">schedule</button>
 			</div>
+
+			<rampike-tabs id="rp-tabs-side" tab="schedule">
+				<rampike-tab key="manage">
+					<article class="add-device-block shadow">
+						<input type="text" id="add-device-name" class="strip-defaults input-outline text-input" placeholder="device name"></input>
+						<button id="add-device-button" class="strip-defaults butt-on">add device</button>
+					</article>
+					<div class="devices-list"></div>
+				</rampike-tab>
+				<rampike-tab key="schedule"></rampike-tab>
+			</rampike-tabs>
+
 		</div>
 	</body>
 </html>
