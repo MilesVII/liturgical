@@ -1,3 +1,4 @@
+import { strings } from "./config";
 import { mudcrack } from "./mudcrack";
 import { fromTemplate, rampike } from "./rampike";
 import type { Device, Ritual } from "./types";
@@ -77,7 +78,7 @@ function renderDevice(
 		if (titleEdible()) saveName();
 	});
 	removeButton.addEventListener("click", () => {
-		if (!confirm(`removing device`)) return;
+		if (!confirm(strings.removeDeviceConfirm(device.name))) return;
 		root.remove();
 		remove();
 	});
@@ -95,7 +96,7 @@ function renderDevice(
 			from: dateStringToUnixTime(from.value)
 		}
 		if (!values.name || isNaN(values.days)) {
-			alert("name empty or time interval invalid")
+			alert(strings.ritualValidationError)
 			return;
 		}
 

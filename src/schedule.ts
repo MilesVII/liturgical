@@ -1,7 +1,8 @@
+import { DAY_MS, strings } from "./config";
 import { mudcrack } from "./mudcrack";
 import { fromTemplate } from "./rampike";
 import { Device, TwistedRitual } from "./types";
-import { allRituals, closestLiturgy, DAY_MS } from "./utils";
+import { allRituals, closestLiturgy } from "./utils";
 
 export function updateScheduleGrid(devices: Device[]) {
 	const twisted = dupeRecentlyPassed(allRituals(devices));
@@ -15,6 +16,14 @@ export function updateScheduleGrid(devices: Device[]) {
 	if (!container || !template) return;
 	container.innerHTML = "";
 	
+	if (twisted.length === 0) {
+		container.append(mudcrack({
+			elementName: "div",
+			textContent: strings.scheduleGridPlaceholder
+		}));
+		return;
+	}
+
 	for (const [group, rituals] of Object.entries(grouped)) {
 		if (!rituals) continue;
 

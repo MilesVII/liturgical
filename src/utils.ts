@@ -1,11 +1,7 @@
+import { DAY_MS, DEFAULT_TIME } from "./config";
 import { Device, TwistedRitual } from "./types";
 
 const PERSIST_KEY = "devices"
-
-const MIN_MS = 60 * 1000;
-const HOUR_MS = 60 * MIN_MS;
-export const DAY_MS = 24 * HOUR_MS;
-export const DEFAULT_TIME = 10 * HOUR_MS;
 
 export function unixTimeToDateString(unixTime: number): string {
 	const date = new Date(unixTime * 1000);
