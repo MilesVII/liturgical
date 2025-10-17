@@ -1,6 +1,5 @@
+import { fromTemplateFirst, mudcrack, rampike } from "rampike";
 import { strings } from "./config";
-import { mudcrack } from "./mudcrack";
-import { fromTemplate, rampike } from "./rampike";
 import type { Device, Ritual } from "./types";
 import { dateStringToUnixTime, unixTimeToDateString } from "./utils";
 
@@ -35,7 +34,7 @@ function renderDevice(
 	removeRitual: (ritualIndex: number) => void
 ) {
 	const template = document.querySelector<HTMLTemplateElement>("#template-device")!;
-	const node = fromTemplate(template);
+	const node = fromTemplateFirst(template)!;
 	const title = node.querySelector("h2")!;
 	const startDate = node.querySelector<HTMLInputElement>(".date-input")!;
 	const titleEdible = () => !(!title.contentEditable || title.contentEditable === "false" || title.contentEditable === "inherit");
@@ -54,7 +53,7 @@ function renderDevice(
 			})
 		} else {
 			const template = document.querySelector<HTMLTemplateElement>("template#template-rituals-placeholder")!;
-			const placeholder = fromTemplate(template);
+			const placeholder = fromTemplateFirst(template)!;
 			ritualsList.append(placeholder);
 		}
 	});
@@ -116,25 +115,25 @@ function renderDevice(
 
 function ritualView(ritual: Ritual, removeCB: () => void) {
 	const template = document.querySelector<HTMLTemplateElement>("template#template-ritual")!;
-	const ritualContainer = fromTemplate(template);
+	const ritualContainer = fromTemplateFirst(template)!;
 
 	ritualContainer.querySelector("summary")!.textContent = ritual.name;
 	const details = ritualContainer.querySelector("div")!;
 
 	details.append(
 		mudcrack({
-			elementName: "div",
+			tagName: "div",
 			className: "device-ritual-description",
-			textContent: ritual.desc
+			contents: ritual.desc
 		}),
 		mudcrack({
-			elementName: "div",
-			textContent: `every ${ritual.days} days`
+			tagName: "div",
+			contents: strings.ritualInterval(`${ritual.days}`)
 		}),
 		mudcrack({
-			elementName: "button",
+			tagName: "button",
 			className: "strip-defaults butt-on",
-			textContent: "remove",
+			contents: "remove",
 			events: {
 				"click": removeCB
 			}

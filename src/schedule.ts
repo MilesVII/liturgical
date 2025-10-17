@@ -1,6 +1,5 @@
+import { fromTemplateFirst, mudcrack } from "rampike";
 import { DAY_MS, strings } from "./config";
-import { mudcrack } from "./mudcrack";
-import { fromTemplate } from "./rampike";
 import { Device, TwistedRitual } from "./types";
 import { allRituals, closestLiturgy } from "./utils";
 
@@ -18,8 +17,8 @@ export function updateScheduleGrid(devices: Device[]) {
 	
 	if (twisted.length === 0) {
 		container.append(mudcrack({
-			elementName: "div",
-			textContent: strings.scheduleGridPlaceholder
+			tagName: "div",
+			contents: strings.scheduleGridPlaceholder
 		}));
 		return;
 	}
@@ -29,12 +28,12 @@ export function updateScheduleGrid(devices: Device[]) {
 
 		container.append(
 			mudcrack({
-				elementName: "h3",
-				textContent: group
+				tagName: "h3",
+				contents: group
 			})
 		);
 		
-		const dayBlock = fromTemplate(template);
+		const dayBlock = fromTemplateFirst(template)!;
 		const ritualsByDevice = Object.groupBy(rituals, r => r.device.id);
 
 		for (const rituals of Object.values(ritualsByDevice)) {
@@ -42,17 +41,17 @@ export function updateScheduleGrid(devices: Device[]) {
 
 			dayBlock.append(
 				mudcrack({
-					elementName: "div",
-					children: [
+					tagName: "div",
+					contents: [
 						mudcrack({
-							elementName: "h4",
-							textContent: rituals[0].device.name
+							tagName: "h4",
+							contents: rituals[0].device.name
 						}),
 						mudcrack({
-							elementName: "ul",
-							children: rituals.map(ritual => mudcrack({
-								elementName: "li",
-								textContent: ritual.name
+							tagName: "ul",
+							contents: rituals.map(ritual => mudcrack({
+								tagName: "li",
+								contents: ritual.name
 							}))
 						})
 					]
